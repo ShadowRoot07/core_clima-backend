@@ -1,16 +1,16 @@
 services:
   - type: web
     name: agro-monitor-backend
-    runtime: docker # <--- Aquí le decimos que use nuestro Dockerfile
+    runtime: docker
     plan: free
     region: ohio
     envVars:
       - key: DATABASE_URL
-        fromConfig: true # La tomaremos de la UI de Render o Neon
+        fromConfig: true
       - key: CLIMA_API_KEY
-        sync: false # La pondremos manualmente en Render por seguridad
+        sync: false
       - key: DEBUG
         value: "False"
       - key: SECRET_KEY
-        generateValue: true # Render generará una segura por nosotros
+        generateValue: true
 
