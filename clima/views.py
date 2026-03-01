@@ -1,34 +1,41 @@
-from rest_framework import viewsets
-from .models import Location, WeatherHistory
-from .serializers import LocationSerializer, WeatherHistorySerializer
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from .models import Location, WeatherHistory
+from .serializers import LocationSerializer, WeatherHistorySerializer
 from .services import WeatherService
 
-
 class LocationViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet to manage Locations (Gardens/Farms).
+    Includes a custom action to fetch real-time weather.
+    """
     queryset = Location.objects.all()
-    serializer_serializer = LocationSerializer
+    serializer_class = LocationSerializer
+
+    @action(detail=True, methods=['get'], url_path='current-weather')
+    def current_weather(self, request, pk=None):
+        """
+        Custom action: GET /api/locations/{id}/current-weather/
+        Fetches data from OpenWeatherMap via WeatherService.
+        """
+        location = self.get_object()
+        weather_data = WeatherService.fetch_and_save_weather(location)
+
+        if weather_data:
+            return Response(weather_data, status=status.HTTP_200_OK)
+        
+        return Response(
+            {"error": "Could not fetch weather data from external API"}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 
 class WeatherHistoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    Solo lectura porque el historial se creará vía API externa, 
-    no manualmente desde el frontend de React.
+    Read-only ViewSet for historical weather data.
+    Records are created automatically when fetching current weather.
     """
     queryset = WeatherHistory.objects.all()
     serializer_class = WeatherHistorySerializer
 
-
-class LocationViewSet(viewsets.ModelViewSet):
-    queryset = Location.objects.all()
-    serializer_class = LocationSerializer
-
-    @action(detail=True, methods=['get'])
-    def clima_actual(self, request, pk=None):
-        location = self.get_object()
-        datos_clima = WeatherService.obtener_y_guardar_clima(location)
-        
-        if datos_clima:
-            return Response(datos_clima)
-        return Response({"error": "No se pudo obtener el clima"}, status=500)
