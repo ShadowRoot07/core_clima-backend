@@ -28,7 +28,7 @@ OPENWEATHER_API_KEY = os.getenv('CLIMA_API_KEY')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clima',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
