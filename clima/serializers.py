@@ -4,13 +4,12 @@ from .models import Location, WeatherHistory
 class WeatherHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = WeatherHistory
-        fields = ['id', 'temperatura', 'humedad', 'presion', 'descripcion', 'icono', 'fecha_registro']
+        fields = ['id', 'temperature', 'humidity', 'pressure', 'description', 'icon', 'recorded_at']
 
 class LocationSerializer(serializers.ModelSerializer):
-    # Esto permite que al pedir una ubicación, opcionalmente veas su historial
     history = WeatherHistorySerializer(many=True, read_only=True)
 
     class Meta:
         model = Location
-        fields = ['id', 'nombre', 'latitud', 'longitud', 'history', 'fecha_creacion']
+        fields = ['id', 'name', 'latitude', 'longitude', 'history', 'created_at']
 
