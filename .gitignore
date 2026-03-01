@@ -1,0 +1,27 @@
+# Entornos virtuales (¡Súper importante!)
+venv/
+ENV/
+env/
+.env
+
+# Base de Datos (No querrás subir tu DB local con datos de prueba)
+db.sqlite3
+db.sqlite3-journal
+
+# Archivos de Python (Caché que no sirve en el repo)
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Configuración de Django (Seguridad)
+local_settings.py
+.secrets
+.env
+
+# Archivos de sistema / Editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
